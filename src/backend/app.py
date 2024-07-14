@@ -17,14 +17,14 @@ def homepage():
 @app.route("/age")#, methods=['POST'])
 # @cross_origin()
 def send_age():
-    logger.info("Sending age")
+    print("Sending age")
     return jsonify({'message': 'age received'})
     # return "<p>I sent age!</p>"
 
 @app.route("/values")#, methods=['POST'])
 # @cross_origin()
 def send_values():
-    logger.info("Sending values")
+    print("Sending values")
     return jsonify({'message': 'values received'})
 
 if __name__ == '__main__':
