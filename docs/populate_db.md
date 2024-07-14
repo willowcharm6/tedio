@@ -5,7 +5,7 @@ General notes
 
 Workflow
 - Get Supabase working - DONE 6/30
-- Figure out how to add stuff to the DB on supabase thru website/client
+- Figure out how to add stuff to the DB on supabase thru website/client - DONE
 - Figure out API endpoints
 - Get Python script to interact w/ Supabase
 - Takes channel URLs and populates DB with each video
