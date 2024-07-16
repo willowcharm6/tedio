@@ -4,25 +4,26 @@ import logging
 
 
 app = Flask(__name__)
-cors = CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
+# cors = CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
+CORS(app)
 logger = logging.getLogger(__name__)
 
 app.config['CORS_HEADERS'] = 'Content-Type'
 
-@app.route("/")
-@cross_origin()
-def homepage():
-    return "<p>Starting page</p>"
-
-@app.route("/age")#, methods=['POST'])
+# @app.route("/")
 # @cross_origin()
+# def homepage():
+#     return "<p>Starting page</p>"
+
+@app.route("/age", methods=['GET'])
+@cross_origin()
 def send_age():
     print("Sending age")
     return jsonify({'message': 'age received'})
     # return "<p>I sent age!</p>"
 
-@app.route("/values")#, methods=['POST'])
-# @cross_origin()
+@app.route("/values", methods=['GET'])
+@cross_origin()
 def send_values():
     print("Sending values")
     return jsonify({'message': 'values received'})
