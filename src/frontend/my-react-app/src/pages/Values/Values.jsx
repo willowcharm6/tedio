@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+// submit button should send a json of all values
+
 const Values = () => {
   const [values, setValues] = useState([]);
 

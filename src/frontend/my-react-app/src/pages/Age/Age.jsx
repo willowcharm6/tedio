@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
 
+// submit button should send a json of just age
+
 const Age = () => {
   const [age, setAge] = useState(null);
 

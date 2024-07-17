@@ -52,7 +52,7 @@ def insert_into_supabase(data):
             print(f"APIError: {e.message}")
 
 def main():
-    video_ids = ["8sh9ytHMJ9g", "dFThF-w5CoY", "9Qk4-ttdtzk"]  # this will be what we get from the scraper
+    video_ids = ["xBmEWiWkx9I"]  # this will be what we get from the scraper
     video_details = get_youtube_video_details(video_ids)
     insert_into_supabase(video_details)
 if __name__ == '__main__':
