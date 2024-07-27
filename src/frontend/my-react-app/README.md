@@ -1,3 +1,8 @@
+# To-do on the frontend
+- Hard-code context to be passed between all components
+- Generate basic buttons and text boxes for values and age pages respectively
+- Make next button to move btwn values and age pages
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
