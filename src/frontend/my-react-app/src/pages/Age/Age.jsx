@@ -1,16 +1,21 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import UserDetailsContext from '../../context/userDetailsContext';
 
 // submit button should send a json of just age
 
 const Age = () => {
-  const {setUserDetails } = useContext(UserDetailsContext)
-  const [age, setAge] = useState('');
+  const {age, setUserDetails } = useContext(UserDetailsContext)
+  const [localAge, setLocalAge] = useState('');
 
-  const handleAgeChange = (age, newAge) => {
-    setAge(newAge)
-    console.log("new age: ", age)
+  const handleAgeChange = (newAge) => {
+    setLocalAge(newAge);
+    setUserDetails({ age: newAge });
+    console.log("new age from state: ", newAge);
   }
+
+  useEffect(() => {
+    console.log("UserDetailsContext updated:", { age, setUserDetails });
+  }, [age, setUserDetails]);
 
   // useEffect(() => {
   //   fetch('http://localhost:5000/api/age')
@@ -24,17 +29,17 @@ const Age = () => {
   // }, []);
 
   return (
-    <UserDetailsContext.Provider value={age}>
+    // <UserDetailsContext.Provider value={age}>
     <div>
       <h2>Age Form</h2>
       <label>Age:</label>
       <input
         type='text'
-        value={age}
-        onChange={(e) => handleAgeChange(age, e.target.value)}
+        value={localAge}
+        onChange={(e) => handleAgeChange(e.target.value)}
       />
     </div>
-    </UserDetailsContext.Provider>
+    // </UserDetailsContext.Provider>
   );
 };
 

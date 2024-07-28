@@ -7,7 +7,7 @@ import Input from "../../components/input.jsx";
 import Button from "../../components/button.jsx";
 import UserDetailsContext from "../../context/userDetailsContext.jsx";
 import { useState, useContext } from "react";
-import merge from 'lodash.merge'
+import Age from "../Age/Age.jsx";
 
 
 const UserDetailsProvider = ({children}) => {
@@ -34,7 +34,10 @@ const UserDetailsProvider = ({children}) => {
 
   return (
     <UserDetailsContext.Provider value={userDetails}>
-      {children}
+      <h3>
+        This is homepage.jsx
+      </h3>
+      <Age />
     </UserDetailsContext.Provider>
   )
 
