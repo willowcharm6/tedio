@@ -1,10 +1,13 @@
-import { createContext } from "react";
+import { useState } from "react";
 
-const UserDetailsContext = createContext({
-    age: '',
-    values: [''],
-
-    setUserDetails: userDetails => {}
-})
-
+const UserDetailsContext = () => {
+    const [age, setAge] = useState("");
+    const [values, setValues] = useState("");
+    return {
+      age,
+      setAge,
+      values,
+      setValues
+    };
+  };
 export default UserDetailsContext
