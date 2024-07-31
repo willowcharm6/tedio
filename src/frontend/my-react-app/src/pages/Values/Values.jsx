@@ -18,6 +18,13 @@ const Values = () => {
   //     });
   // }, []);
 
+  // useEffect(() => {
+  //   console.log("UserDetailsContext updated:")
+  //   for (let i = 0; i < length(values); i++) {
+  //     console.log(values[i]);
+  //   }
+  // })
+
   const handleAdd = (event) => {
     console.log("in handleAdd")
     var updatedValues = [...localValues]
@@ -39,17 +46,41 @@ const Values = () => {
     }
   };
 
-  // const SendUserData = () => {
-  //   fetch('http://localhost:5000/send_user_data')
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       setValues(data);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error fetching values:', error);
-  //     });
-  // }, []);
-  // }
+  const SendUserData = async () => {
+    const data = useContext(UserDetailsContext)
+    console.log("this is the data we're about to send: ", data)
+    // console.log("this is the age we're about to send: ", UserDetailsContext.Provider.age)
+    const userData = {
+      age: data.age,
+      value_list: ['test713', 'test7131', 'test7132']
+      
+    }
+    try {
+      console.log("Sending user data: ")
+      // console.log()
+      const response = await fetch('http://localhost:5000/send_user_data', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userData)
+      })
+
+      // console.log(response)
+      console.log("About to submit ")
+
+      if (response.ok) {
+        console.log("Data submitted successfully");
+      } 
+      else {
+        console.log("Failed to submit data");
+      }
+    }
+
+    catch(error) {
+      console.error("Error submitting data:", error)
+    }
+  }
 
   // useEffect(() => {
   //   console.log("UserDetailsContext updated:", { values, setUserDetails });
@@ -95,6 +126,7 @@ const Values = () => {
           Honesty
         </label>
       </div>
+      <button onClick={SendUserData}>Submit</button>
     </div>
   );
 };

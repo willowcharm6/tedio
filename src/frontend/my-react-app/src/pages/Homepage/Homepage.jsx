@@ -8,7 +8,7 @@ import Button from "../../components/button.jsx";
 import UserDetailsContext from "../../context/userDetailsContext.jsx";
 import { useState, useContext } from "react";
 import Age from "../Age/Age.jsx";
-
+import merge from 'lodash.merge'
 
 const UserDetailsProvider = ({children}) => {
   const setUserDetails = ({

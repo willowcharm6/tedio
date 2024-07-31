@@ -9,8 +9,9 @@ const Age = () => {
 
   const handleAgeChange = (newAge) => {
     setLocalAge(newAge);
-    setUserDetails({ age: newAge });
+    setUserDetails({ age: newAge });  // this isn't correctly updating age
     console.log("new age from state: ", newAge);
+    console.log("UserDetailsContext updated:", { age, setUserDetails })
   }
 
   useEffect(() => {
@@ -29,7 +30,7 @@ const Age = () => {
   // }, []);
 
   return (
-    // <UserDetailsContext.Provider value={age}>
+    <UserDetailsContext.Provider value={{age, setUserDetails}}>
     <div>
       <h2>Age Form</h2>
       <label>Age:</label>
@@ -39,7 +40,7 @@ const Age = () => {
         onChange={(e) => handleAgeChange(e.target.value)}
       />
     </div>
-    // </UserDetailsContext.Provider>
+    </UserDetailsContext.Provider>
   );
 };
 
