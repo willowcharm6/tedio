@@ -6,39 +6,51 @@ import Age from './pages/Age/Age.jsx';
 import Values from './pages/Values/Values.jsx';
 import UserForm from './pages/UserForm/UserForm.jsx';
 // import Test from './pages/Values/Submit.jsx'
+// Below is to get the sandbox to work
+import { Test } from './Test.js';
+import ReactDOM from 'react-dom'
+import react from "react"
 
-function App() {
-  return (
-    <Router>
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <nav>
-            <ul>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="/values">Values</Link>
-              </li>
-              <li>
-                <Link to="/age">Age</Link>
-              </li>
-            </ul>
-          </nav>
-        </header>
-        <Routes>
-          {/* <Route path="/" element={<Homepage />} /> */}
-          {/* <Route path="/values" element={<Values />} /> */}
-          {/* <Route path="/age" element={<Age />} /> */}
-          <Route path="/user_form" element={<UserForm />} />
-        </Routes>
-      </div>
-    </Router>
-  );
-}
+const rootElement = document.getElementById("root");
+ReactDOM.render(
+  <React.StrictMode>
+    <Test />
+  </React.StrictMode>,
+  rootElement
+);
 
-export default App;
+// function App() {
+//   return (
+    // <Router>
+    //   <div className="App">
+    //     <header className="App-header">
+    //       <img src={logo} className="App-logo" alt="logo" />
+    //       <p>
+    //         Edit <code>src/App.js</code> and save to reload.
+    //       </p>
+    //       <nav>
+    //         <ul>
+    //           <li>
+    //             <Link to="/">Home</Link>
+    //           </li>
+    //           <li>
+    //             <Link to="/values">Values</Link>
+    //           </li>
+    //           <li>
+    //             <Link to="/age">Age</Link>
+    //           </li>
+    //         </ul>
+    //       </nav>
+    //     </header>
+    //     <Routes>
+    //       {/* <Route path="/" element={<Homepage />} /> */}
+    //       {/* <Route path="/values" element={<Values />} /> */}
+    //       {/* <Route path="/age" element={<Age />} /> */}
+    //       <Route path="/user_form" element={<UserForm />} />
+    //     </Routes>
+    //   </div>
+    // </Router>
+//   );
+// }
+
+export default Test;

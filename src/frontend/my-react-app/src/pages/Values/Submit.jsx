@@ -5,17 +5,17 @@ import Values from "./Values";
 const Submit = () => {
     const { age, values } = UserDetailsContext();
 
-    const HandleSubmit = () => {
-        console.log(age)
-        console.log(values)
-    }
+    // const HandleSubmit = () => {
+    //     console.log(age)
+    //     console.log(values)
+    // }
 
 
 
     // return (<button onClick={HandleSubmit}>Submit</button>);
     return (
         <p>
-            Age: {age}
+            Age: {age} <br />
             Values: {values}
         </p>
     )

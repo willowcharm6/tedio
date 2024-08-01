@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const UserDetailsContext = () => {
+const UserDetailsState = () => {
     const [age, setAge] = useState("");
     const [values, setValues] = useState("");
     return {
@@ -10,4 +10,4 @@ const UserDetailsContext = () => {
       setValues
     };
   };
-export default UserDetailsContext
+export default UserDetailsState
