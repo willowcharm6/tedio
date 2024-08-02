@@ -107,30 +107,30 @@ export default Values;
 //       value_list: ['test713', 'test7131', 'test7132']
       
 //     }
-//     try {
-//       console.log("Sending user data: ")
-//       // console.log()
-//       const response = await fetch('http://localhost:5000/send_user_data', {
-//         method: 'POST',
-//         headers: {
-//           'Content-Type': 'application/json',
-//         },
-//         body: JSON.stringify(userData)
-//       })
+    // try {
+    //   console.log("Sending user data: ")
+    //   // console.log()
+    //   const response = await fetch('http://localhost:5000/send_user_data', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(userData)
+    //   })
 
-//       // console.log(response)
-//       console.log("About to submit ")
+    //   // console.log(response)
+    //   console.log("About to submit ")
 
-//       if (response.ok) {
-//         console.log("Data submitted successfully");
-//       } 
-//       else {
-//         console.log("Failed to submit data");
-//       }
-//     }
+    //   if (response.ok) {
+    //     console.log("Data submitted successfully");
+    //   } 
+    //   else {
+    //     console.log("Failed to submit data");
+    //   }
+    // }
 
-//     catch(error) {
-//       console.error("Error submitting data:", error)
-//     }
-//   }
+    // catch(error) {
+    //   console.error("Error submitting data:", error)
+    // }
+  // }
 

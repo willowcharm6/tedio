@@ -1,7 +1,8 @@
-# To-do on the frontend
-- Hard-code context to be passed between all components
-- Generate basic buttons and text boxes for values and age pages respectively
-- Make next button to move btwn values and age pages
+# To-do on the frontend (8/1)
+- Change values addition and removal to checkbox: DONE
+- Add sending req logic to handleSubmit: DONE
+- Move everything back to its own component pages + add imports
+- Refactor + reorganize git branches
 
 # Getting Started with Create React App
 

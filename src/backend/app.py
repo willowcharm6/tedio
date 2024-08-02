@@ -30,18 +30,23 @@ supabase: Client = create_client(url, supabase_key)
 # def homepage():
 #     return "<p>Starting page</p>"
 
-@app.route("/age", methods=['GET', 'POST'])
+@app.route("/send_user_data", methods=['GET', 'POST'])
 @cross_origin()
-def send_age():
-    fake_req = {'age':6}
-    print("In age route")
+def send_user_data():
+    # fake_req = {'age':6}
+    print("In send_user_data route")
+    data = request.get_json()
+    # return jsonify({'status':'success', 'message':'data received'})
     try:
-        print("trying to send age")
-        response = supabase.table('users').insert(fake_req).execute()
+        print("trying to send user_data")
+        response = supabase.table('users').insert(data).execute()
         print(f"Supabase response: {response}")
         # if response.status_code in range (200, 299):
-        print(f"Inserted user with age {fake_req['age']} successfully")
-        return jsonify({'status':'success', 'message':'age received'})
+        print(f"Inserted user with age {data['age']} successfully")
+        print(f"Inserted user with values")
+        for i, val in enumerate(data['value_list']):
+            print(f'Value {i + 1}: {val}')
+        return jsonify({'status':'success', 'message':'data received'})
         # else:
             # return jsonify({'status':'failure', 'message':'SQL error'})
     except APIError as e:
