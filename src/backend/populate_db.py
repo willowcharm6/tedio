@@ -64,6 +64,7 @@ def insert_into_supabase(data):
 
 def rate_videos(video_ids):
     client = OpenAI(api_key=openai_key)
+    # TO-DO: Create value list from existing columns in DB
     value_list = ["kindness", "cooperation", "honesty"]  # hard-coded
     age = 12  # hard-coded
     # fetch transcript data based on each video id
@@ -80,9 +81,13 @@ def rate_videos(video_ids):
             print(f"API Error: {e.message}")
             return
 
+    # TO-DO: change the below prompt to give an age range instead of just a number
+        # what the prompt should include: Also recommend an appropriate age rating out of the following labels based on the following YouTube video transcript: preschool (age 4 and under), younger (age 5-8), and older (age 9-12)
+
     prompt = f"""
         
-        On a scale from 1 to 10, rate how much the following YouTube video transcript promotes each of these values for a child aged {age}.
+        On a scale from 1 to 10, rate how much the following YouTube video transcript promotes each of these values
+        Also recommend an appropriate integer age based on the following YouTube video transcript
 
         Transcript:
         {transcript}
@@ -91,17 +96,52 @@ def rate_videos(video_ids):
         {value_list}
 
         Output:
-        Provide a dictionary that maps each value to its corresponding score. 
+        Respond in the following JSON format but without the 'json' prefix before the dictionary:
+        {{
+            "value_dict": {{
+                "kindness": "insert score",
+                "cooperation": "insert score",
+                "honesty": "insert score"
+            }},
+            "age_rating": "age"
+        }}
+        Provide a dictionary that maps each value to its corresponding score.
+        Provide the recommended age rating label.
     """
 
     completion = client.chat.completions.create(
         model="gpt-4o-mini",
         messages=[
-            {"role":"user", "content":prompt}
+            {"role":"user", "content":prompt, "response_format":"tyoe"}
         ]
     )
     print(completion.choices[0].message.content)
-
+    # TO-DO: iterate thru json output and insert value scores for each value and age rating into DB
+    output_dict = json.loads(completion.choices[0].message.content)
+    try:
+        response = supabase.table('videos').update([
+           {'age_rating': output_dict['age_rating']} 
+        ]).eq('video_id', video_id).execute()
+    except APIError as e:
+        print(f"API Error: {e.message}")
+        return
+    
+    try:
+        for value, value_score in output_dict["value_dict"].items():
+            print(value)
+            print(value_score)
+            response = supabase.table('videos').update([
+            {value: value_score} 
+            ]).eq('video_id', video_id).execute()
+    except APIError as e:
+        print(f"API Error: {e.message}")
+        return
+    print("success")
+    
+    # print(output_dict["age_rating"])
+    # for value, value_score in output_dict["value_dict"].items():
+    #     print(value)
+    #     print(value_score)
 
 
 

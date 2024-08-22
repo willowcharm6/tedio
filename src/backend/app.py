@@ -62,5 +62,10 @@ def send_values():
     print("Sending values")
     return jsonify({'message': 'values received'})
 
+# TO-DO: write route that gets called by handleSubmit button: age, values -> list of video ids
+    # filter videos by age range
+    # for each of the given values, sum up the value scores and average them across the number of values
+    # add videos ids in order of highest to lowest aggregated value scores
+
 if __name__ == '__main__':
     app.run(debug=True)
