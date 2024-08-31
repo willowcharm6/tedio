@@ -1,0 +1,8 @@
+- Finish route that stores user info + associated video_ids
+    - Store age, value_list for that user
+    - Filter by age category
+    - Calculate average value score w/ weights (keep even for now)
+    - Store video_ids in order of average value in DB
+    - Return video_ids in json
+- Create a login route
+- Change DB schema 

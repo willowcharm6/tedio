@@ -65,7 +65,7 @@ def insert_into_supabase(data):
 def rate_videos(video_ids):
     client = OpenAI(api_key=openai_key)
     # TO-DO: Create value list from existing columns in DB
-    value_list = ["kindness", "cooperation", "honesty"]  # hard-coded
+    value_list = ["respect", "responsibility", "empathy", "courage", "perseverance", "gratitude", "curiosity", "kindness", "honesty", "science and technology"]  # hard-coded
     age = 12  # hard-coded
     # fetch transcript data based on each video id
     for video_id in video_ids:
@@ -103,7 +103,7 @@ def rate_videos(video_ids):
                 "cooperation": "insert score",
                 "honesty": "insert score"
             }},
-            "age_rating": "insert age category label"
+            "age_rating": "insert age category label in lowercase without the parenthetical age range"
         }}
         Provide a dictionary that maps each value to its corresponding score.
         Provide the recommended age category label.
@@ -146,7 +146,7 @@ def rate_videos(video_ids):
 
 
 def main():
-    video_ids = ["STUDDsT6lYI"]  # this will be what we get from the scraper
+    video_ids = ["STUDDsT6lYI"]#, "1iM-uYX-9Pc", "oVJl4FWVP0s", "Z3AeX8SJFt8", "64LZLSgdpSk", "EN1SxGLlvCs", "X00f_tEKHqM"]  # this will be what we get from the scraper
     video_details = get_youtube_video_details(video_ids)
     insert_into_supabase(video_details)
     rate_videos(video_ids)

@@ -52,8 +52,8 @@ const Values = () => {
             <label>
             <input
                 type="checkbox"
-                name="Kindness"
-                checked={values.includes("Kindness")}
+                name="kindness"
+                checked={values.includes("kindness")}
                 onChange={handleAdd}
             />
             Kindness
@@ -63,22 +63,33 @@ const Values = () => {
             <label>
             <input
                 type="checkbox"
-                name="Cooperation"
-                checked={values.includes("Cooperation")}
+                name="respect"
+                checked={values.includes("respect")}
                 onChange={handleAdd}
             />
-            Cooperation
+            Respect
             </label>
         </div>
         <div>
             <label>
             <input
                 type="checkbox"
-                name="Honesty"
-                checked={values.includes("Honesty")}
+                name="honesty"
+                checked={values.includes("honesty")}
                 onChange={handleAdd}
             />
             Honesty
+            </label>
+        </div>
+        <div>
+            <label>
+            <input
+                type="checkbox"
+                name="responsibility"
+                checked={values.includes("responisibility")}
+                onChange={handleAdd}
+            />
+            Responsibility
             </label>
         </div>
             {/* <button onClick={SendUserData}>Submit</button> */}
@@ -109,6 +120,7 @@ const SendUserData = () => {
       
             if (response.ok) {
               console.log("Data submitted successfully");
+              console.log(response.data)
             } 
             else {
               console.log("Failed to submit data");
