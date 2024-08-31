@@ -6,6 +6,11 @@ General notes
 Workflow
 - Get Supabase working - DONE 6/30
 - Figure out how to add stuff to the DB on supabase thru website/client - DONE
-- Figure out API endpoints
-- Get Python script to interact w/ Supabase
-- Takes channel URLs and populates DB with each video
+- Figure out API endpoints - DONE
+- Get Python script to interact w/ Supabase - DONE
+- Takes channel URLs and populates DB with each video - DONE
+- Change prompt and result to output the age categories, not just a number - DONE 8/31
+- Finish route to send video_ids
+    - Filter by age category
+    - Calculate average value score w/ weights (keep even for now)
+    - Return video_ids in order of average value

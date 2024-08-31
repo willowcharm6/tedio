@@ -87,7 +87,7 @@ def rate_videos(video_ids):
     prompt = f"""
         
         On a scale from 1 to 10, rate how much the following YouTube video transcript promotes each of these values
-        Also recommend an appropriate integer age based on the following YouTube video transcript
+        Given the following rubric, analyze the provided video transcript and determine its appropriate age category: 'Preschool (Age 4 and under)', 'Younger (Ages 5-8)', or 'Older (Ages 9-12)'.\n\nRubric:\n\n1. Content Appropriateness:\n- Preschool: Simple concepts (colors, numbers, shapes, animals, basic stories), clear and direct messaging, themes of kindness, sharing, basic safety, bright and colorful visuals.\n- Younger: More complex concepts (problem-solving, friendship, basic science, early history), introduction of cause-and-effect relationships, themes of teamwork, curiosity, exploration, detailed and relatable animations.\n- Older: In-depth topics (science experiments, historical events, social issues), introduction of abstract concepts, themes of empathy, leadership, social justice, realistic visuals, mature animation styles.\n\n2. Video Length:\n- Preschool: 1-5 minutes, quick pacing to maintain attention.\n- Younger: 5-10 minutes, allows for more story development.\n- Older: 10-20 minutes, delves into detailed explanations.\n\n3. Source/Channel Reliability:\n- All categories: Reputable, child-friendly sources, content rated for the respective age group.\n\n4. Depth of Content:\n- Preschool: Very light, focused on basic concepts.\n- Younger: Moderate, introduces slightly complex ideas.\n- Older: Deeper exploration, encourages critical thinking.\n\n5. Language:\n- Preschool: Simple, clear, repetitive, basic vocabulary.\n- Younger: Slightly advanced, introduction of new vocabulary, clear but not overly complex.\n- Older: Complex sentences, advanced vocabulary, expands understanding.\n\n6. Engagement:\n- Preschool: Interactive elements (songs, dances, questions), gentle participation.\n- Younger: Stories that encourage problem-solving, interactive thinking or small activities.\n- Older: Intellectually challenging, encourages questions and real-world connections, could include quizzes or discussion prompts.\n\nAnalyze the transcript based on these criteria and return the most appropriate age category.
 
         Transcript:
         {transcript}
@@ -103,10 +103,10 @@ def rate_videos(video_ids):
                 "cooperation": "insert score",
                 "honesty": "insert score"
             }},
-            "age_rating": "age"
+            "age_rating": "insert age category label"
         }}
         Provide a dictionary that maps each value to its corresponding score.
-        Provide the recommended age rating label.
+        Provide the recommended age category label.
     """
 
     completion = client.chat.completions.create(
