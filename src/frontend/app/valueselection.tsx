@@ -37,7 +37,7 @@ export default function ValueSelectionScreen({ navigation, formData }) {
 
     try {
       // Example backend URL, replace with your actual endpoint
-      const response = await fetch('http://localhost:5000/send_user_data', {
+      const response = await fetch('http://localhost:5000/generate_vids', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -35,19 +35,19 @@ supabase_key = os.getenv("SUPABASE_KEY")
 supabase: Client = create_client(url, supabase_key)
 
 weights = {
-    'Respect': 1,
-    'Honesty': 1,
-    'Responsibility': 1,
-    'Empathy': 1,
-    'Courage': 1,
-    'Perseverance': 1,
-    'Gratitude': 1,
-    'Curiosity': 1,
-    'Kindness': 1,
-    'Science and Technology': 1
+    'respect': 1,
+    'honesty': 1,
+    'responsibility': 1,
+    'empathy': 1,
+    'courage': 1,
+    'perseverance': 1,
+    'gratitude': 1,
+    'curiosity': 1,
+    'kindness': 1,
+    'science and technology': 1
 }
 
-@app.route("/send_user_data", methods=['GET', 'POST'])
+@app.route("/generate_vids", methods=['GET', 'POST'])
 @cross_origin()
 def send_user_data():
     print(f"In send_user_data route")
@@ -114,20 +114,71 @@ def send_user_data():
     except Exception as e:
         print(f"Unexpected error in user data insert: {e}")
         return jsonify({'status': 'failure', 'message': 'An unexpected error occurred when inserting user data'}) 
-    # data = request.get_json()
-    # print(f"received data: {data}")
-    # return jsonify({'status':'success', 'message':'data received on send_user_data route'})
 
-@app.route("/values", methods=['GET', 'POST'])
+# takes in email and password, returns authentication result msg + whole user object for form population if successful
+@app.route("/authenticate", methods=['GET', 'POST'])
 @cross_origin()
-def send_values():
-    print("Sending values")
-    return jsonify({'message': 'values received'})
+def authenticate():
+    data = request.get_json()
+    email = data["email"]
+    pwd = data["password"]
+    try:
+        response = supabase.table('users').select('*').eq('email', email).single().execute()
+        stored_salt = response.data['salt']
+        stored_password_hash = response.data['password']
+        salt = base64.b64decode(stored_salt)
+        hashed_password = hashlib.pbkdf2_hmac('sha256', pwd.encode('utf-8'), salt, 100000)
+        hashed_password_base64 = base64.b64encode(hashed_password).decode('utf-8')
+        print(f"Here are the first 10 characters of stored pwd: {stored_password_hash[:11]}")
+        print(f"Here are the first 10 characters of entered pwd: {hashed_password_base64[:11]}")
+        if hashed_password_base64 == stored_password_hash:
+            user_data = response.data
+            print(f"Authentication successful.")
+            return jsonify({'status': 'success', 'message': 'You are logged in!', 'user_data': user_data})
+        else:
+            print(f"Authentication failed.")
+            return jsonify({'status': 'failure', 'message': 'Password is incorrect'})
 
-# TO-DO: write route that gets called by handleSubmit button: age, values -> list of video ids
-    # filter videos by age range
-    # for each of the given values, sum up the value scores and average them across the number of values
-    # add videos ids in order of highest to lowest aggregated value scores
+    except Exception as e:
+        print(f"Authentication failed")
+        return jsonify({'status': 'failure', 'message': 'Email is incorrect'})    
+# called if we have difference btwn original user data and entered form data
+# @app.route("/retrieve_vids", methods=['GET'])
+# @cross_origin()
+# def retrieve_user_vids():
+#     data = request.get_json()
+
+@app.route("/update_watch_history", methods=['GET', 'POST'])
+@cross_origin()
+def update_watch_history():
+    data = request.get_json()  # send over the user_id + video_history list
+    user_id = data["user_id"]
+    new_video = data["new_video"]
+    try:
+        response = supabase.table('users').select('video_history').eq('user_id', user_id).single().execute()
+        current_video_history = response.data.get('video_history', []) if response.data else []
+
+        # Prepend the new video data to the current video history
+        updated_video_history = [new_video] + current_video_history
+
+        # Upsert the 'video_history' column where 'user_id' matches
+        try:
+            upsert_response = supabase.table('users').upsert({
+                'user_id': user_id,
+                'video_history': updated_video_history
+            }, on_conflict=['user_id']).execute()
+            print(f"Upsert successful.")
+            return jsonify({'status': 'success', 'message': 'Upserted video watch history'})
+
+        except Exception as e:
+            print(f"Unexpected error: {e}")
+            return jsonify({'status': 'failure', 'message': 'An unexpected error occurred during video_history upsert'})
+
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        return jsonify({'status': 'failure', 'message': 'An unexpected error occurred during initial retrieval of video_history'})
+
+
 
 if __name__ == '__main__':
     app.run(debug=True)
