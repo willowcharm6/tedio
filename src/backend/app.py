@@ -11,8 +11,12 @@ from googleapiclient.discovery import build
 from googleapiclient.errors import HttpError
 import openai
 from openai import OpenAI
+import hashlib
+import base64
 
 load_dotenv()
+
+#config
 url = os.getenv("SUPABASE_URL")
 supabase_key = os.getenv("SUPABASE_KEY")
 print(supabase_key)
@@ -28,14 +32,20 @@ app.config['CORS_HEADERS'] = 'Content-Type'
 # setting up DB
 url = os.getenv("SUPABASE_URL")
 supabase_key = os.getenv("SUPABASE_KEY")
-# youtube_key = os.getenv('YOUTUBE_KEY')
 supabase: Client = create_client(url, supabase_key)
-# youtube = build('youtube', 'v3', developerKey=youtube_key)  # resource object to interact w/ API
 
-# @app.route("/")
-# @cross_origin()
-# def homepage():
-#     return "<p>Starting page</p>"
+weights = {
+    'Respect': 1,
+    'Honesty': 1,
+    'Responsibility': 1,
+    'Empathy': 1,
+    'Courage': 1,
+    'Perseverance': 1,
+    'Gratitude': 1,
+    'Curiosity': 1,
+    'Kindness': 1,
+    'Science and Technology': 1
+}
 
 @app.route("/send_user_data", methods=['GET', 'POST'])
 @cross_origin()
@@ -64,12 +74,13 @@ def send_user_data():
         for video in valid_vids:
             val_sum = 0
             val_len = 0
-            # total_weight = 0
+            total_weight = 0
             for value in data["value_list"]:
-                val_sum += video[f"{value}"]  # multiply by weight val from weights dict
-                # total_weight += weight_val
+                weight = weights[f"{value}"]
+                val_sum += (video[f"{value}"] * weight)  # multiply by weight val from weights dict
+                total_weight += weight
                 val_len += 1
-            avg_score = float(val_sum) / float(val_len)
+            avg_score = float(val_sum) / float(total_weight)
             ranking[video["video_id"]] = avg_score
         print(f"here is length of value score dict: {len(ranking.keys())}")
         # sort list of video_ids by averaged value_score
@@ -81,6 +92,11 @@ def send_user_data():
         print(f"Unexpected error: {e}")
         return jsonify({'status': 'failure', 'message': 'An unexpected error occurred when creating list of sorted video_ids'})
     try:
+        # salt and hash pwd
+        salt = os.urandom(32)
+        hashed_pwd = hashlib.pbkdf2_hmac('sha256', data["password"].encode('utf-8'), salt, 100000)
+        data["password"] = base64.b64encode(hashed_pwd).decode('utf-8')
+        data["salt"] = base64.b64encode(salt).decode('utf-8')
         print(f"trying to send user_data of: {data}")
         response = supabase.table('users').insert(data).execute()
         print(f"Supabase response: {response}")

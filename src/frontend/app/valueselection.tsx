@@ -32,8 +32,8 @@ export default function ValueSelectionScreen({ navigation, formData }) {
       return;
     }
 
-    const finalData = { ...formData, value_list: selectedValues };
-    console.log(finalData); // Send this data to the backend
+    const finalData = { ...formData, value_list: selectedValues.map(value => value.toLowerCase()) };
+    // console.log(finalData); // Send this data to the backend
 
     try {
       // Example backend URL, replace with your actual endpoint
