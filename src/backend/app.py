@@ -26,8 +26,6 @@ logger = logging.getLogger(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
 
 # setting up DB
-load_dotenv()
-
 url = os.getenv("SUPABASE_URL")
 supabase_key = os.getenv("SUPABASE_KEY")
 # youtube_key = os.getenv('YOUTUBE_KEY')
@@ -42,7 +40,6 @@ supabase: Client = create_client(url, supabase_key)
 @app.route("/send_user_data", methods=['GET', 'POST'])
 @cross_origin()
 def send_user_data():
-    # fake_req = {'age':6}
     print(f"In send_user_data route")
     data = request.get_json()
     print(data)
@@ -101,6 +98,9 @@ def send_user_data():
     except Exception as e:
         print(f"Unexpected error in user data insert: {e}")
         return jsonify({'status': 'failure', 'message': 'An unexpected error occurred when inserting user data'}) 
+    # data = request.get_json()
+    # print(f"received data: {data}")
+    # return jsonify({'status':'success', 'message':'data received on send_user_data route'})
 
 @app.route("/values", methods=['GET', 'POST'])
 @cross_origin()

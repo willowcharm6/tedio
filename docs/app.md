@@ -1,8 +1,10 @@
-- Finish route that stores user info + associated video_ids
+- Finish route that stores user info + associated video_ids - DONE 8/31
     - Store age, value_list for that user
     - Filter by age category
     - Calculate average value score w/ weights (keep even for now)
     - Store video_ids in order of average value in DB
     - Return video_ids in json
-- Create a login route
-- Change DB schema 
+- Create a login route to fetch existing video_ids
+    - If age or value_list edited, re-run ranking logic to fetch new list of video_ids
+    - Hash passwords
+- Implement video watch history feature when logged in
