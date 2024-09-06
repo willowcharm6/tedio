@@ -157,18 +157,18 @@ def update_watch_history():
     try:
         response = supabase.table('users').select('video_history').eq('user_id', user_id).single().execute()
         current_video_history = response.data.get('video_history', []) if response.data else []
+        if current_video_history:
+            updated_video_history = [new_video] + current_video_history  # Prepend the new video data to the current video history
 
-        # Prepend the new video data to the current video history
-        updated_video_history = [new_video] + current_video_history
+        else:
+            updated_video_history = [new_video]
 
-        # Upsert the 'video_history' column where 'user_id' matches
         try:
-            upsert_response = supabase.table('users').upsert({
-                'user_id': user_id,
+            upsert_response = supabase.table('users').update({
                 'video_history': updated_video_history
-            }, on_conflict=['user_id']).execute()
-            print(f"Upsert successful.")
-            return jsonify({'status': 'success', 'message': 'Upserted video watch history'})
+            }).eq("user_id", user_id).execute()
+            print(f"Update successful.")
+            return jsonify({'status': 'success', 'message': 'Updated video watch history'})
 
         except Exception as e:
             print(f"Unexpected error: {e}")
