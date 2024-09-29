@@ -72,8 +72,9 @@ export default function ValueSelectionScreen({ navigation, formData }) {
       return;
     }
 
-    const finalData = { ...formData, values: selectedValues };
+    const finalData = { ...formData, value_list: selectedValues.map(value => value.toLowerCase()) };
     console.log(finalData); // Log the data for now
+    delete finalData.values
 
     const jsonFinalData = JSON.stringify(finalData)
 

@@ -79,7 +79,8 @@ def send_user_data():
             val_sum = 0
             val_len = 0
             total_weight = 0
-            for value in data["values"]:
+            print(f"this is data at L82: {data}")
+            for value in json_data["value_list"]:
                 print("curr val on L83: ", value)
                 weight = weights[f"{value}"]
                 val_sum += (video[f"{value}"] * weight)  # multiply by weight val from weights dict
@@ -87,29 +88,30 @@ def send_user_data():
                 val_len += 1
             avg_score = float(val_sum) / float(total_weight)
             ranking[video["video_id"]] = avg_score
+            print("L91")
         print("L89")
         print(f"here is length of value score dict: {len(ranking.keys())}")
         # sort list of video_ids by averaged value_score
         sorted_video_ids = [key for key, value in sorted(ranking.items(), key=lambda item: item[1], reverse=True)]
         # add parameter to data json body called "video_ids"
         print(f"here is length of video_ids sorted by average value score: {len(sorted_video_ids)}")
-        data["video_ids"] = sorted_video_ids
+        json_data["video_ids"] = sorted_video_ids
     except Exception as e:
         print(f"Unexpected error: {e}")
         return jsonify({'status': 'failure', 'message': 'An unexpected error occurred when creating list of sorted video_ids'})
     try:
         # salt and hash pwd
         salt = os.urandom(32)
-        hashed_pwd = hashlib.pbkdf2_hmac('sha256', data["password"].encode('utf-8'), salt, 100000)
-        data["password"] = base64.b64encode(hashed_pwd).decode('utf-8')
-        data["salt"] = base64.b64encode(salt).decode('utf-8')
-        print(f"trying to send user_data of: {data}")
-        response = supabase.table('users').insert(data).execute()
+        hashed_pwd = hashlib.pbkdf2_hmac('sha256', json_data["password"].encode('utf-8'), salt, 100000)
+        json_data["password"] = base64.b64encode(hashed_pwd).decode('utf-8')
+        json_data["salt"] = base64.b64encode(salt).decode('utf-8')
+        print(f"trying to send user_data of: {json_data}")
+        response = supabase.table('users').insert(json_data).execute()
         print(f"Supabase response: {response}")
         # if response.status_code in range (200, 299):
         print(f"Inserted user with age {json_data['age']} successfully")
         print(f"Inserted user with values")
-        for i, val in enumerate(json_data['values']):
+        for i, val in enumerate(json_data['value_list']):
             print(f'Value {i + 1}: {val}')
         return jsonify({'status':'success', 'message':'data received', 'video_ids': sorted_video_ids})
     except APIError as e:
