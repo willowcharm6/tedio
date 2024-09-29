@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet, TouchableOpacity, ScrollView, Image, Alert } from 'react-native';
+import { jsiConfigureProps } from 'react-native-reanimated/lib/typescript/reanimated2/core';
 
 const valuesList = [
   { label: 'Respect', image: 'https://example.com/respect.png' },
@@ -15,7 +16,7 @@ const valuesList = [
 ];
 
 export default function ValueSelectionScreen({ navigation, formData }) {
-  const [selectedValues, setSelectedValues] = useState([]);
+/*  const [selectedValues, setSelectedValues] = useState([]);
 
   const toggleValue = (value) => {
     setSelectedValues((prev) =>
@@ -26,18 +27,17 @@ export default function ValueSelectionScreen({ navigation, formData }) {
   };
 
   const handleNext = async () => {
-    
     if (selectedValues.length < 5) {
       Alert.alert('Please select at least 5 values.');
       return;
     }
 
-    const finalData = { ...formData, value_list: selectedValues.map(value => value.toLowerCase()) };
-    // console.log(finalData); // Send this data to the backend
+    const finalData = { ...formData, values: selectedValues };
+    console.log(finalData); // Send this data to the backend
 
     try {
       // Example backend URL, replace with your actual endpoint
-      const response = await fetch('http://localhost:5000/generate_vids', {
+      const response = await fetch('https://your-backend-url.com/api/submit', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -48,10 +48,37 @@ export default function ValueSelectionScreen({ navigation, formData }) {
       const responseData = await response.json();
       console.log('Data submitted successfully:', responseData);
       Alert.alert('Success', 'Your data has been submitted!');
+
+      navigation.navigate('VideoSelection');
+
     } catch (error) {
       console.error('Error submitting data:', error);
       Alert.alert('Error', 'Failed to submit data. Please try again.');
     }
+  };*/
+  const [selectedValues, setSelectedValues] = useState([]);
+
+  const toggleValue = (value) => {
+    setSelectedValues((prev) =>
+      prev.includes(value)
+        ? prev.filter((v) => v !== value)
+        : [...prev, value]
+    );
+  };
+
+  const handleNext = () => {
+    if (selectedValues.length < 5) {
+      Alert.alert('Please select at least 5 values.');
+      return;
+    }
+
+    const finalData = { ...formData, values: selectedValues };
+    console.log(finalData); // Log the data for now
+
+    const jsonFinalData = JSON.stringify(finalData)
+
+    // Navigate to the VideoSelectionScreen without backend submission
+    navigation.navigate('VideoSelection', { jsonFinalData });
   };
 
   return (

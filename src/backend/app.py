@@ -53,8 +53,9 @@ def send_user_data():
     print(f"In send_user_data route")
     data = request.get_json()
     print(data)
+    json_data = json.loads(data)
     try:
-        age = int(data["age"])
+        age = int(json_data["age"])
         # take each value from data["value_list"]
         # for each [value]_score from json body, average it out for the video in a weighted average
         if age <= 4:
@@ -67,21 +68,26 @@ def send_user_data():
             raise ValueError("Age is outside the valid range for this query (4-12).")
         # Query the Supabase table to get videos matching the age category
         print(age_category)
+        print("L70")
         response = supabase.table('videos').select('*').eq('age_rating', age_category).execute()
         valid_vids = response.data
+        print("L73")
         print(f"here is the length of allowed videos: {len(valid_vids)}")
         ranking = {}
         for video in valid_vids:
+            print("L78")
             val_sum = 0
             val_len = 0
             total_weight = 0
-            for value in data["value_list"]:
+            for value in data["values"]:
+                print("curr val on L83: ", value)
                 weight = weights[f"{value}"]
                 val_sum += (video[f"{value}"] * weight)  # multiply by weight val from weights dict
                 total_weight += weight
                 val_len += 1
             avg_score = float(val_sum) / float(total_weight)
             ranking[video["video_id"]] = avg_score
+        print("L89")
         print(f"here is length of value score dict: {len(ranking.keys())}")
         # sort list of video_ids by averaged value_score
         sorted_video_ids = [key for key, value in sorted(ranking.items(), key=lambda item: item[1], reverse=True)]
@@ -101,13 +107,11 @@ def send_user_data():
         response = supabase.table('users').insert(data).execute()
         print(f"Supabase response: {response}")
         # if response.status_code in range (200, 299):
-        print(f"Inserted user with age {data['age']} successfully")
+        print(f"Inserted user with age {json_data['age']} successfully")
         print(f"Inserted user with values")
-        for i, val in enumerate(data['value_list']):
+        for i, val in enumerate(json_data['values']):
             print(f'Value {i + 1}: {val}')
         return jsonify({'status':'success', 'message':'data received', 'video_ids': sorted_video_ids})
-        # else:
-            # return jsonify({'status':'failure', 'message':'SQL error'})
     except APIError as e:
         print(f"APIError: {e.message}")
         return jsonify({'status':'failure', 'message':e.message})

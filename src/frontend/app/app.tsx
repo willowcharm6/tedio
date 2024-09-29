@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import SignInScreen from './signin'; // Screen to sign in
 import AgeInputScreen from './ageinput'; // Screen to input age
 import ValueSelectionScreen from './valueselection'; // Screen to select values
+import VideoSelectionScreen from './videoselection'; 
 
 const Stack = createStackNavigator();
 
@@ -14,7 +15,7 @@ export default function App() {
     email: '',
     password: '',
     age: '',
-    value_list: [],
+    values: [],
   });
 
   const handleDataChange = (newData) => {
@@ -32,6 +33,9 @@ export default function App() {
         </Stack.Screen>
         <Stack.Screen name="ValueSelection">
           {(props) => <ValueSelectionScreen {...props} formData={formData} />}
+        </Stack.Screen>
+        <Stack.Screen name="VideoSelection">
+          {(props) => <VideoSelectionScreen {...props} formData={formData} />}
         </Stack.Screen>
       </Stack.Navigator>
     </NavigationContainer>
