@@ -68,32 +68,33 @@ def send_user_data():
             raise ValueError("Age is outside the valid range for this query (4-12).")
         # Query the Supabase table to get videos matching the age category
         print(age_category)
-        print("L70")
         response = supabase.table('videos').select('*').eq('age_rating', age_category).execute()
         valid_vids = response.data
-        print("L73")
         print(f"here is the length of allowed videos: {len(valid_vids)}")
         ranking = {}
+        video_data = []
         for video in valid_vids:
-            print("L78")
             val_sum = 0
             val_len = 0
             total_weight = 0
-            print(f"this is data at L82: {data}")
             for value in json_data["value_list"]:
-                print("curr val on L83: ", value)
                 weight = weights[f"{value}"]
                 val_sum += (video[f"{value}"] * weight)  # multiply by weight val from weights dict
                 total_weight += weight
                 val_len += 1
             avg_score = float(val_sum) / float(total_weight)
             ranking[video["video_id"]] = avg_score
-            print("L91")
-        print("L89")
+            video_obj = {
+                'title': video['title'],            # Access the title from the video object
+                'videoId': video['video_id'],       # Use video_id as videoId
+                'thumbnail': video['thumbnail']     # Access the thumbnail field
+            }
+            video_data.append(video_obj)            # Add video object to list
+
         print(f"here is length of value score dict: {len(ranking.keys())}")
         # sort list of video_ids by averaged value_score
         sorted_video_ids = [key for key, value in sorted(ranking.items(), key=lambda item: item[1], reverse=True)]
-        # add parameter to data json body called "video_ids"
+        sorted_videos = [video for video in video_data if video['videoId'] in sorted_video_ids]
         print(f"here is length of video_ids sorted by average value score: {len(sorted_video_ids)}")
         json_data["video_ids"] = sorted_video_ids
     except Exception as e:
@@ -113,7 +114,7 @@ def send_user_data():
         print(f"Inserted user with values")
         for i, val in enumerate(json_data['value_list']):
             print(f'Value {i + 1}: {val}')
-        return jsonify({'status':'success', 'message':'data received', 'video_ids': sorted_video_ids})
+        return jsonify({'status':'success', 'message':'data received', 'data': sorted_videos})
     except APIError as e:
         print(f"APIError: {e.message}")
         return jsonify({'status':'failure', 'message':e.message})

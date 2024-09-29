@@ -48,8 +48,10 @@ export default function VideoSelectionScreen({ navigation, route }) {
       }
       
       const data = await response.json();  // Assuming backend sends an array of video objects
-      setVideos(data);  // Set fetched videos into state
+      console.log(`Received data from backend: ${JSON.stringify(data)}`)
+      setVideos(data.data);  // Set fetched videos into state
       setLoading(false);
+      console.log("reached L54!")
     } catch (err) {
       console.error('Error fetching from backend, using dummy data:', err.message);
       // If there's an error, use the dummy data
