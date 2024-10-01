@@ -67,6 +67,7 @@ export default function VideoSelectionScreen({ navigation, route }) {
 
   const handleVideoPress = (videoId) => {
     setSelectedVideo(videoId);
+    
     setModalVisible(true);
   };
 

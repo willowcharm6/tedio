@@ -94,9 +94,9 @@ def send_user_data():
         print(f"here is length of value score dict: {len(ranking.keys())}")
         # sort list of video_ids by averaged value_score
         sorted_video_ids = [key for key, value in sorted(ranking.items(), key=lambda item: item[1], reverse=True)]
-        sorted_videos = [video for video in video_data if video['videoId'] in sorted_video_ids]
+        sorted_videos = [next(video for video in video_data if video['videoId'] == video_id) for video_id in sorted_video_ids]
         print(f"here is length of video_ids sorted by average value score: {len(sorted_video_ids)}")
-        json_data["video_ids"] = sorted_video_ids
+        json_data["recommended_vids"] = sorted_video_ids
     except Exception as e:
         print(f"Unexpected error: {e}")
         return jsonify({'status': 'failure', 'message': 'An unexpected error occurred when creating list of sorted video_ids'})
@@ -114,6 +114,7 @@ def send_user_data():
         print(f"Inserted user with values")
         for i, val in enumerate(json_data['value_list']):
             print(f'Value {i + 1}: {val}')
+        print(f"right before returning, here's sorted_videos: {sorted_videos}")
         return jsonify({'status':'success', 'message':'data received', 'data': sorted_videos})
     except APIError as e:
         print(f"APIError: {e.message}")
