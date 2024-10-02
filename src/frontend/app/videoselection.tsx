@@ -27,6 +27,16 @@ export default function VideoSelectionScreen({ navigation, route }) {
   
   // const route = useRoute();
   const { jsonFinalData } = route.params;
+  console.log(`data: ${jsonFinalData}`)
+  // if jsonFinalData has parameter recommended_vids --> coming from login, so just render these videos in the data
+  if (jsonFinalData.recommended_vids !== undefined) {
+    console.log(`coming from login: ${jsonFinalData}`)
+    // assign recommended_vids to video state var.
+  }
+
+  else {
+    console.log(`coming from sign up ${jsonFinalData}`)
+  }
 
   console.log(`my data is here!!!!! ${jsonFinalData}`); // This will print the finalData object
 
@@ -67,7 +77,7 @@ export default function VideoSelectionScreen({ navigation, route }) {
 
   const handleVideoPress = (videoId) => {
     setSelectedVideo(videoId);
-    
+
     setModalVisible(true);
   };
 

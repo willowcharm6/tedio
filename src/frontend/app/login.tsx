@@ -1,25 +1,57 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import { View, TextInput, Button, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
 
-export default function SignInScreen({ navigation, onDataChange }) {
+export default function LogInScreen({ navigation, onDataChange }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleContinue = () => {
+    // fetch authenticate route, which returns userData
+  const handleNext = async () => {
+    const finalData = { "email": email, "password": password };
+    console.log(`on login: ${finalData}`); // Send this data to the backend
 
-    onDataChange({ email, password });
-    navigation.navigate('AgeInput');
+    try {
+      // Example backend URL, replace with your actual endpoint
+      const response = await fetch('http://localhost:5000/authenticate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(finalData),
+      });
+
+      const responseData = await response.json();
+      const userData = JSON.stringify(responseData.user_data)
+      console.log('Data received:', userData);
+      // if (!responseData.ok) {
+        
+        
+      // }
+
+      // else {
+      navigation.navigate('VideoSelection', { jsonFinalData: userData });
+
+      // }
+
+    } catch (error) {
+      console.error('Error submitting data:', error);
+      Alert.alert('Error', 'Failed to submit data. Please try again.');
+    };
+    // if userExists: populate the form with the userData (e.g. age = user_data["age"], etc.)
+    // onDataChange({ email, password });
+    // navigation.navigate('VideoSelection');
   };
 
-  const navigateToLogin = () => {
-    navigation.navigate('LogIn');
+  const navigateToSignIn = () => {
+    navigation.navigate('SignIn');
   }
+
 
   return (
     <View style={styles.container}>
 
-      <TouchableOpacity style={styles.topButton} onPress = {navigateToLogin}>
-        <Text style = {styles.topButtonText}>Login</Text>
+      <TouchableOpacity style={styles.topButton} onPress = {navigateToSignIn}>
+        <Text style = {styles.topButtonText}>Sign Up</Text>
       </TouchableOpacity>
       <View style={styles.formContainer}>
         <Text style={styles.title}>Welcome to Tedio</Text>
@@ -37,8 +69,8 @@ export default function SignInScreen({ navigation, onDataChange }) {
           onChangeText={setPassword}
           secureTextEntry
         />
-        <TouchableOpacity style={styles.button} onPress={handleContinue}>
-          <Text style={styles.buttonText}>Sign Up</Text>
+        <TouchableOpacity style={styles.button} onPress={handleNext}>
+          <Text style={styles.buttonText}>Login</Text>
         </TouchableOpacity>
       </View>
     </View>

@@ -107,7 +107,7 @@ def send_user_data():
         json_data["password"] = base64.b64encode(hashed_pwd).decode('utf-8')
         json_data["salt"] = base64.b64encode(salt).decode('utf-8')
         print(f"trying to send user_data of: {json_data}")
-        response = supabase.table('users').insert(json_data).execute()
+        response = supabase.table('users').upsert(json=json_data, on_conflict=['email']).execute()
         print(f"Supabase response: {response}")
         # if response.status_code in range (200, 299):
         print(f"Inserted user with age {json_data['age']} successfully")
@@ -124,6 +124,7 @@ def send_user_data():
         return jsonify({'status': 'failure', 'message': 'An unexpected error occurred when inserting user data'}) 
 
 # takes in email and password, returns authentication result msg + whole user object for form population if successful
+# need to retrieve all video data for each video_id also
 @app.route("/authenticate", methods=['GET', 'POST'])
 @cross_origin()
 def authenticate():
@@ -142,7 +143,7 @@ def authenticate():
         if hashed_password_base64 == stored_password_hash:
             user_data = response.data
             print(f"Authentication successful.")
-            return jsonify({'status': 'success', 'message': 'You are logged in!', 'user_data': user_data})
+            return jsonify({'status': 'success', 'message': 'You are logged in!', 'user_data': user_data, 'exists': True})
         else:
             print(f"Authentication failed.")
             return jsonify({'status': 'failure', 'message': 'Password is incorrect'})
