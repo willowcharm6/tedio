@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet, ScrollView, Modal, Button, Platform, ActivityIndicator } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
 // import { WebView } from 'react-native-webview';  // Used only for iOS/Android
 
 export default function VideoSelectionScreen({ navigation, route }) {
@@ -75,12 +77,37 @@ export default function VideoSelectionScreen({ navigation, route }) {
     fetchVideos();  // Fetch videos when the component mounts
   }, []);
 
-  const handleVideoPress = (videoId) => {
+  const handleVideoPress = async (videoId) => {
     setSelectedVideo(videoId);
 
     setModalVisible(true);
-  };
 
+    try{
+      const userID = await AsyncStorage.getItem('userID');
+      console.log(JSON.stringify({
+        userID,
+        videoId,
+      }));
+      const response = await fetch("http://localhost:5000/update_watch_history", {
+        method: 'POST',
+        headers: {
+          'Content-Type':'application/json',
+        },
+        body: JSON.stringify({
+          userID,
+          videoId,
+        }),
+      });
+      if(!response.ok){
+        throw new Error('Failed to save video selection');
+      }
+      console.log ('Video selection saved to backend');
+
+      }catch(error){
+        console.error('Error saving video selection:',error);
+      }
+    };
+  
   const closeModal = () => {
     setModalVisible(false);
     setSelectedVideo(null);

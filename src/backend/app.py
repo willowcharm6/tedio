@@ -161,20 +161,23 @@ def authenticate():
 @cross_origin()
 def update_watch_history():
     data = request.get_json()  # send over the user_id + video_history list
-    user_id = data["user_id"]
-    new_video = data["new_video"]
+    user_id = data["userID"]
+    video_id = data["videoId"]
+    print(f"we received a user_id of {user_id} and a video_id of {video_id}")
     try:
-        response = supabase.table('users').select('video_history').eq('user_id', user_id).single().execute()
-        current_video_history = response.data.get('video_history', []) if response.data else []
+        response = supabase.table('users').select('watch_history').eq('user_id', user_id).single().execute()
+        current_video_history = response.data.get('watch_history', []) if response.data else []
         if current_video_history:
-            updated_video_history = [new_video] + current_video_history  # Prepend the new video data to the current video history
+            if video_id in current_video_history:
+                current_video_history.remove(video_id)
+            updated_video_history = [video_id] + current_video_history  # Prepend the new video data to the current video history
 
         else:
-            updated_video_history = [new_video]
+            updated_video_history = [video_id]
 
         try:
             upsert_response = supabase.table('users').update({
-                'video_history': updated_video_history
+                'watch_history': updated_video_history
             }).eq("user_id", user_id).execute()
             print(f"Update successful.")
             return jsonify({'status': 'success', 'message': 'Updated video watch history'})

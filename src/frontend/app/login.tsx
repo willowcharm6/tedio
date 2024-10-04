@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, TextInput, Button, StyleSheet, Text, TouchableOpacity, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export default function LogInScreen({ navigation, onDataChange }) {
   const [email, setEmail] = useState('');
@@ -23,12 +24,10 @@ export default function LogInScreen({ navigation, onDataChange }) {
       const responseData = await response.json();
       const userData = JSON.stringify(responseData.user_data)
       console.log('Data received:', userData);
-      // if (!responseData.ok) {
-        
-        
-      // }
-
-      // else {
+      
+      const user_id = responseData.user_data.user_id;
+      console.log(`login at L29: ${user_id}`)
+      await AsyncStorage.setItem('userID',user_id);
       navigation.navigate('VideoSelection', { jsonFinalData: userData });
 
       // }
