@@ -44,8 +44,32 @@ weights = {
     'gratitude': 1,
     'curiosity': 1,
     'kindness': 1,
-    'science and technology': 1
+    'science and technology': 1,
+    'storytime and reading': 1,
+    'arts and DIY projects': 1,
+    'historical adventures': 1,
+    'geography': 1,
+    'coding and technology': 1,
+    'active movement': 1,
+    'language learning': 1,
+    'nature and wildlife': 1,
+    'cooking': 1,
+    'phonics': 1,
+    'vocabulary': 1,
+    'kids\' songs and sing-alongs': 1,
+    'exploration': 1,
+    'problem solving': 1,
+    'diversity': 1,
+    'storytelling': 1,
+    'reduce, reuse, recycle': 1,
+    'ecosystems': 1,
+    'biographies': 1,
+    'family activities': 1,
+    'teamwork': 1,
+    'safety and life skills': 1,
+    'inspirational stories': 1
 }
+
 
 @app.route("/generate_vids", methods=['GET', 'POST'])
 @cross_origin()
