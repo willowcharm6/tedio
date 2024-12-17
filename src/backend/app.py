@@ -24,7 +24,7 @@ supabase: Client = create_client(url, supabase_key)
 openai_key = os.getenv('OPENAI_KEY')
 
 # setting up flask
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../dist', static_url_path='/')
 CORS(app)
 logger = logging.getLogger(__name__)
 app.config['CORS_HEADERS'] = 'Content-Type'
@@ -70,8 +70,13 @@ weights = {
     'inspirational stories': 1
 }
 
+@app.route('/')
+@cross_origin
+def index():
+    return app.send_static_file('index.html')
 
-@app.route("/generate_vids", methods=['GET', 'POST'])
+
+@app.route("/api/generate_vids", methods=['GET', 'POST'])
 @cross_origin()
 def send_user_data():
     print(f"In send_user_data route")
@@ -149,7 +154,7 @@ def send_user_data():
 
 # takes in email and password, returns authentication result msg + whole user object for form population if successful
 # need to retrieve all video data for each video_id also
-@app.route("/authenticate", methods=['GET', 'POST'])
+@app.route("/api/authenticate", methods=['GET', 'POST'])
 @cross_origin()
 def authenticate():
     data = request.get_json()
@@ -181,7 +186,7 @@ def authenticate():
 # def retrieve_user_vids():
 #     data = request.get_json()
 
-@app.route("/update_watch_history", methods=['GET', 'POST'])
+@app.route("/api/update_watch_history", methods=['GET', 'POST'])
 @cross_origin()
 def update_watch_history():
     data = request.get_json()  # send over the user_id + video_history list
