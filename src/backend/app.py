@@ -73,7 +73,7 @@ weights = {
 @app.route('/')
 @cross_origin
 def index():
-    return app.send_static_file('index.html')
+    return "this is the / route"
 
 
 @app.route("/api/generate_vids", methods=['GET', 'POST'])
