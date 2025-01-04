@@ -46,7 +46,7 @@ export default function VideoSelectionScreen({ navigation, route }) {
   const fetchVideos = async () => {
     try {
       // Replace this URL with your backend endpoint when ready
-      const response = await fetch('http://localhost:5000/api/generate_vids', {
+      const response = await fetch('loolicious.pythonanywhere.com/api/generate_vids', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -88,7 +88,7 @@ export default function VideoSelectionScreen({ navigation, route }) {
         userID,
         videoId,
       }));
-      const response = await fetch("http://localhost:5000/api/update_watch_history", {
+      const response = await fetch("loolicious.pythonanywhere.com/api/update_watch_history", {
         method: 'POST',
         headers: {
           'Content-Type':'application/json',

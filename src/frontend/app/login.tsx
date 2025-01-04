@@ -13,7 +13,7 @@ export default function LogInScreen({ navigation, onDataChange }) {
 
     try {
       // Example backend URL, replace with your actual endpoint
-      const response = await fetch('http://localhost:5000/api/authenticate', {
+      const response = await fetch("loolicious.pythonanywhere.com/api/authenticate", {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
