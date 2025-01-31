@@ -71,7 +71,7 @@ weights = {
 }
 
 @app.route('/')
-@cross_origin
+@cross_origin()
 def index():
     return "this is the / route"
 

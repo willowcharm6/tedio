@@ -4,7 +4,6 @@ services:
     runtime: python
     buildCommand: |
       pip install -r backend/requirements.txt
-      cd frontend && npm install && npm run build
     startCommand: gunicorn backend.app:app
     envVars:
       - key: FLASK_ENV
