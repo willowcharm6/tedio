@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: flask-backend
+    runtime: python
+    buildCommand: |
+      pip install -r backend/requirements.txt
+      cd frontend && npm install && npm run build
+    startCommand: gunicorn backend.app:app
+    envVars:
+      - key: FLASK_ENV
+        value: production
+    staticPublishPath: ./frontend/build
