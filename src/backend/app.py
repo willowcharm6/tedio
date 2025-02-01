@@ -70,10 +70,10 @@ weights = {
     'inspirational stories': 1
 }
 
-@app.route('/')
+@app.route('/api/dummy_get')
 @cross_origin()
 def index():
-    return "this is the / route"
+    return {'status': 'success', 'message': 'good job'}
 
 
 @app.route("/api/generate_vids", methods=['GET', 'POST'])
